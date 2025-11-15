@@ -1,0 +1,1 @@
+srun --nodes=1 --gpus=4 --qos=gpu4-8h --pty bash

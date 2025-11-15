@@ -1,0 +1,4 @@
+distributed_type: "MULTI_GPU"
+mixed_precision: "bf16"
+num_processes: 16
+num_machines: 4
