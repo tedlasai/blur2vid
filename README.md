@@ -5,8 +5,7 @@ University of Toronto & York University
 
 ### 📄 [Paper (PDF)](your-pdf-link)  
 ### 🌐 [Project Page](https://blur2vid.github.io)  
-### 📂 [Checkpoints](https://ln5.sync.com/dl/fbd840ed0#p448mssy-ta5qhuyk-xgjtp2r3-g73huj8t)
-
+### 📂 [Checkpoints](https://huggingface.co/tedlasai/learn2refocus/tree/main)
 ---
 
 ## 📌 Citation
