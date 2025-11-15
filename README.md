@@ -82,7 +82,7 @@ export CUDA_VISIBLE_DEVICES=0,1,2,3 #4 GPUS
 
 accelerate launch --config_file accelerator_configs/accelerator_val_config.yaml --multi_gpu \
   train_controlnet.py \
-  --config "configs/outsidephotos.yaml"
+  --config "SPECIFIED CONFIG FILE"
 ```
 
 ---
