@@ -38,15 +38,17 @@ conda activate blur2vid
 ```
 
 - Install PyTorch and all dependencies listed in the YAML file.   
-- Download the weights and extract the corresponding folder into `training`. For exmaple, for in-the-wild, you would want a folder at path `training/cogvideox-outsidephotos`
+
 ---
 
 
 
 ### 🧪 Testing (In-the-Wild)
+
+
 1. Set the basedir in `training/configs/outsidephotos.yaml` to the path of the repository on your computer. This will be the directory that contains the README.md. 
 2. Place images (png) in `datasets/my_motion_blurred_images`. You may also place your photos in any other directory and change the video_root_dir in `training/configs/outsidephotos.yaml`. 
-3. Unzip the `cogvideox-outsidephotos` checkpoint directory into `training`. The checkpoint should end up at `training\cogvideox-outsidephotos\checkpoint`.
+3. Download checkpoints with ``python setup/download_checkpoints.py outsidephotos``. The checkpoint directory should appear in the ``training`` directory.
 4. You can change the number of GPUs to whichever is available on your computer through the CUDA_VISIBLE_DEVICES.
 
 
@@ -70,7 +72,7 @@ To test on these datasets it is quite similar to the in-the-wild. Except you may
 
 Set the following paths in your YAML config (feel free to change others paths to match your configuration):
 1. Set the basedir in the corresponding yaml file in `training/configs/` to the path of the repository. This will be the directory that contains the README.md. 
-2. Place the `cogvideox-[experiment_name]` checkpoint directory inside training. 
+2. Download checkpoints with ``python setup/download_checkpoints.py baist`` or ``python setup/download_checkpoints.py gopro``, respectively. The checkpoint directory should appear in the ``training`` directory.
 3. Put the GOPRO or BAIST dataset in `datasets/baist` or `datasets/GOPRO_7` respectively.
 
 ```bash
