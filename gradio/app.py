@@ -26,7 +26,7 @@ OUTPUT_DIR = Path("/tmp/generated_videos")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def generate_video_from_image(image: Image.Image, interval_key: str, orientation_mode: str, num_inference_steps: int) -> str:
+def generate_video_from_image(image: Image.Image, interval_key: str, num_inference_steps: int) -> str:
     """
     Wrapper for Gradio. Takes an image and returns a video path.
     """
@@ -38,19 +38,6 @@ def generate_video_from_image(image: Image.Image, interval_key: str, orientation
     print("CUDA:", torch.cuda.is_available())
     print("Device:", torch.cuda.get_device_name(0))
     print("bf16 supported:", torch.cuda.is_bf16_supported())
-
-    if orientation_mode == "Landscape (1280×720)":
-        print("Chosing resolution 1280×720 (landscape)")
-        args.video_width = 1280
-        args.video_height = 720
-    elif orientation_mode == "Portrait (720×1280)":
-        print("Choosing resolution 720×1280 (portrait)")
-        args.video_height = 1280
-        args.video_width = 720
-    else:
-        print("Unknown orientation mode", orientation_mode, "defaulting to 1280x720")
-        args.video_width = 1280
-        args.video_height = 720
 
     args.num_inference_steps = num_inference_steps
 
@@ -80,7 +67,8 @@ with gr.Blocks(css="footer {visibility: hidden}") as demo:
         - 🌐 **Project page:** <https://blur2vid.github.io/>  
         - 💻 **Code:** <https://github.com/tedlasai/blur2vid/>  
 
-        Upload a blurry image and the model will generate a short video containing the recovered motion depending on your selection.
+        Upload a blurry image and the model will generate a short video showing the recovered motion based on your selection.
+        Note: The image will be resized to 1280×720. We recommend uploading landscape-oriented images.
         """
     )
 
@@ -99,20 +87,6 @@ with gr.Blocks(css="footer {visibility: hidden}") as demo:
                     value="past, present and future",
                     interactive=True,
                 )
-
-            with gr.Row():
-                mode_choice = gr.Radio(
-                    label="Orientation",
-                    choices=["Landscape (1280×720)", "Portrait (720×1280)"],
-                    value="Landscape (1280×720)",
-                    interactive=True,
-                )
-
-            gr.Markdown(
-                "<span style='font-size: 12px; color: gray;'>"
-                "Note: Model was trained on 1280×720 (Landscape). Portrait mode will degrade performance."
-                "</span>"
-            )
 
             num_inference_steps = gr.Slider(
                 label="Number of inference steps",
@@ -135,11 +109,10 @@ with gr.Blocks(css="footer {visibility: hidden}") as demo:
 
     generate_btn.click(
         fn=generate_video_from_image,
-        inputs=[image_in, tense_choice, mode_choice, num_inference_steps],   # ← include tense_choice!
+        inputs=[image_in, tense_choice, num_inference_steps],
         outputs=video_out,
         api_name="predict",
     )
-
 
 if __name__ == "__main__":
     demo.launch()
