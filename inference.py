@@ -161,9 +161,9 @@ def load_model(args):
     # as these weights are only used for inference, keeping weights in full precision is not required.
     weight_dtype = torch.bfloat16
 
-    text_encoder.to(args.device, dtype=weight_dtype)
-    transformer.to(args.device, dtype=weight_dtype)
-    vae.to(args.device, dtype=weight_dtype)
+    text_encoder.to(dtype=weight_dtype)
+    transformer.to(dtype=weight_dtype)
+    vae.to(dtype=weight_dtype)
 
     pipe = ControlnetCogVideoXPipeline.from_pretrained(
         args.pretrained_model_path,
@@ -186,7 +186,6 @@ def load_model(args):
         scheduler_args["variance_type"] = variance_type
 
     pipe.scheduler = CogVideoXDPMScheduler.from_config(pipe.scheduler.config, **scheduler_args)
-    pipe = pipe.to(args.device)
 
     return pipe, model_config
 
@@ -210,14 +209,14 @@ def inference_on_image(pipe, image, interval_key, model_config, args):
             "prompt": "",
             "negative_prompt": "",
             "image": frame,
-            "input_intervals": torch.stack([batch["input_interval"]]),
-            "output_intervals": torch.stack([batch["output_interval"]]),
+            "input_intervals": torch.stack([batch["input_interval"]]).float(),
+            "output_intervals": torch.stack([batch["output_interval"]]).float(),
             "guidance_scale": model_config["guidance_scale"],
             "use_dynamic_cfg": model_config["use_dynamic_cfg"],
             "height": batch["height"],
             "width": batch["width"],
             "num_frames": torch.tensor([[model_config["max_num_frames"]]]), # torch.tensor([[batch["num_frames"]]]),
-            "num_inference_steps": model_config["num_inference_steps"],
+            "num_inference_steps": args.num_inference_steps,
         }
 
         input_image = frame
@@ -246,6 +245,7 @@ def main(args):
         image_paths = [image_path]
 
     pipe, model_config = load_model(args)
+    pipe.to(args.device)
 
     for image_path in image_paths:
         image = Image.open(image_path)
@@ -303,6 +303,12 @@ if __name__ == "__main__":
         type=int,
         default=720,
         help="video resolution height",
+    )
+    parser.add_argument(
+        "--num_inference_steps",
+        type=int,
+        default=50,
+        help="number of DDIM steps",
     )
     parser.add_argument(
         "--seed",
