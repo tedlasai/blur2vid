@@ -454,8 +454,80 @@ def generate_test_case(frame_paths,
     num_frames = len(intervals)
     if len(intervals) < output_len:
         intervals += [intervals[-1]] * (output_len - len(intervals))
-    len
+    
     output_intervals = torch.tensor(intervals, dtype=torch.float)
 
     # final return now also includes summed_seq
     return blur_img, summed_seq, input_interval, output_intervals, seq, num_frames
+
+
+def get_conditioning(
+    output_len=17,
+    in_start=None,
+    in_end=None,
+    out_start=None,
+    out_end=None,
+    mode="1x",
+    fps=240,
+):
+    """
+    Generate normalized intervals conditioning singals. Just like the above function but without
+    loading any images (for inference only).
+
+    Args:
+        output_len: desired length of the output sequence
+        in_start, in_end: integer indices defining the raw window [in_start, in_end)
+        mode: one of "1x", "2x", or "lb"
+        fps: frames-per-second (only used to override mode=="2x" if fps==120)
+
+    Returns:
+        input_interval: torch.Tensor [[-0.5, 0.5]]
+        output_intervals: torch.Tensor shape [output_len, 2], normalized in [-0.5,0.5]
+    """
+
+    # 3) compute normalized intervals
+    input_interval = torch.tensor([[-0.5, 0.5]], dtype=torch.float)
+
+    # 2) define the normalizer
+    def normalize(x, in_start, in_end):
+        return (x - in_start) / (in_end - in_start) - 0.5
+    
+    base_rate = 240 // fps
+   
+    # 3) define the raw intervals in absolute frame‐indices
+    base_rate = 240 // fps
+    if mode == "1x":
+        assert in_start == out_start and in_end == out_end
+        #assert fps == 240, "haven't implemented 120fps in 1x yet"
+        W = (out_end - out_start) // base_rate
+        # one frame per window
+        group_starts = [out_start + i * base_rate for i in range(W)]
+        group_ends   = [out_start + (i + 1) * base_rate for i in range(W)]
+
+    elif mode == "2x":
+        W = (out_end - out_start) // base_rate
+        # every base_rate frames, starting at out_start
+        group_starts = [out_start + i * base_rate for i in range(W)]
+        group_ends   = [out_start + (i + 1) * base_rate for i in range(W)]
+
+    elif mode == "lb":
+        W = (out_end - out_start) // base_rate
+        # sparse “key‐frame” windows from the raw input range
+        group_starts = [in_start + i * base_rate for i in range(W)]
+        group_ends   = [s + 1 for s in group_starts]
+
+    else:
+        raise ValueError(f"Unsupported mode: {mode}")
+
+    # 5) now normalize your intervals as before
+    def normalize(x):
+        return (x - in_start) / (in_end - in_start) - 0.5
+
+    intervals = [[normalize(s), normalize(e)] for s, e in zip(group_starts, group_ends)]
+    num_frames = len(intervals)
+    if len(intervals) < output_len:
+        intervals += [intervals[-1]] * (output_len - len(intervals))
+    
+    output_intervals = torch.tensor(intervals, dtype=torch.float)
+
+    return input_interval, output_intervals, num_frames

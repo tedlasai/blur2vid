@@ -201,7 +201,11 @@ class ControlnetCogVideoXPipeline(DiffusionPipeline, CogVideoXLoraLoaderMixin):
                 f" {max_sequence_length} tokens: {removed_text}"
             )
 
-        prompt_embeds = self.text_encoder(text_input_ids.to(device))[0]
+        # Had to disable auto cast here, otherwise the text encoder produces NaNs. 
+        # Hope it doesn't break training
+        with torch.autocast(device_type=device.type, enabled=False):
+            prompt_embeds = self.text_encoder(text_input_ids.to(device))[0]
+        # prompt embeds is nan here!
         prompt_embeds = prompt_embeds.to(dtype=dtype, device=device)
 
         # duplicate text embeddings for each generation per prompt, using mps friendly method
@@ -633,7 +637,7 @@ class ControlnetCogVideoXPipeline(DiffusionPipeline, CogVideoXLoraLoaderMixin):
         output_intervals = transform_intervals(output_intervals)
 
         latents_initial, target, condition_mask, intervals = random_insert_latent_frame(image_latents, latents, latents, input_intervals, output_intervals, special_info="just_one")
-        
+
         latents = latents_initial.clone()
         with self.progress_bar(total=num_inference_steps) as progress_bar:
             # for DPM-solver++
@@ -659,7 +663,6 @@ class ControlnetCogVideoXPipeline(DiffusionPipeline, CogVideoXLoraLoaderMixin):
 
                 latent_model_input = latent_model_input.to(dtype=self.transformer.dtype)
                 prompt_embeds = prompt_embeds.to(dtype=self.transformer.dtype)
-       
                 # predict noise model_output
                 noise_pred = self.transformer(
                     hidden_states=latent_model_input,
@@ -671,7 +674,6 @@ class ControlnetCogVideoXPipeline(DiffusionPipeline, CogVideoXLoraLoaderMixin):
                     return_dict=False,
                 )[0]
                 noise_pred = noise_pred.float()
-
 
                 # perform guidance
                 if use_dynamic_cfg:
