@@ -53,7 +53,7 @@ conda activate blur2vid
 python inference.py --image_path assets/dummy_image.png --output_path output/
 ```
 
-We also provide an interactive Gradio demo
+We also provide an interactive Gradio demo:
 
 ```bash
 python gradio/app.py
@@ -63,7 +63,7 @@ python gradio/app.py
 
 
 ### 🧪 Testing (GOPRO/BAIST)
-To test on these datasets it is quite similar to the in-the-wild. Except you may use `configs/gopro_test.yaml`, `configs/gopro_2x_test.yaml`, or `configs/baist_test.yaml`, depending on the experiment you are interested in.
+To test on these datasets, please use `configs/gopro_test.yaml`, `configs/gopro_2x_test.yaml`, or `configs/baist_test.yaml`, depending on the experiment you are interested in.
 
 Set the following paths in your YAML config (feel free to change others paths to match your configuration):
 1. Set the basedir in the corresponding yaml file in `training/configs/` to the path of the repository. This will be the directory that contains the README.md. 
