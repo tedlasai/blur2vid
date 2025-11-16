@@ -27,6 +27,7 @@ from safetensors.torch import load_file
 import diffusers
 from diffusers import AutoencoderKLCogVideoX, CogVideoXDPMScheduler
 from diffusers.utils import check_min_version, export_to_video
+from huggingface_hub import hf_hub_download
 
 from controlnet_pipeline import ControlnetCogVideoXPipeline
 from cogvideo_transformer import CogVideoXTransformer3DModel
@@ -122,7 +123,11 @@ def load_model(args):
         variant=model_config["variant"],
         low_cpu_mem_usage=False,
     )
-    transformer.load_state_dict(load_file(args.weight_path))
+    weight_path = hf_hub_download(
+        repo_id=args.blur2vid_hf_repo_path, 
+        filename="cogvideox-outsidephotos/checkpoint/model.safetensors"
+    )
+    transformer.load_state_dict(load_file(weight_path))
 
     text_encoder = T5EncoderModel.from_pretrained(
         args.pretrained_model_path, 
@@ -264,10 +269,10 @@ if __name__ == "__main__":
         help="Path to image input or directory containing input images",
     )
     parser.add_argument(
-        "--weight_path",
+        "--blur2vid_hf_repo_path",
         type=str,
-        default="training/cogvideox-outsidephotos/checkpoint/model.safetensors",
-        help="directory containing weight files",
+        default="tedlasai/blur2vid",
+        help="hf repo containing the weight files",
     )
     parser.add_argument(
         "--pretrained_model_path",
@@ -284,7 +289,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--output_path",
         type=str,
-        required=True,
+        default="output/",
         help="path to output",
     )
     parser.add_argument(
