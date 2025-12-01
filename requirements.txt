@@ -19,3 +19,4 @@ moviepy>=1.0.3
 pillow==9.5.0
 denku==0.0.51
 controlnet-aux==0.0.9
+gradio>=4.44.0

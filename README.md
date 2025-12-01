@@ -3,6 +3,7 @@
 **SaiKiran Tedla, Kelly Zhu, Trevor Canham, Felix Taubner, Michael Brown, Kiriakos Kutulakos, David Lindell**  
 University of Toronto & York University  
 
+### 🤗 [Demo](https://huggingface.co/spaces/tedlasai/blur2vid)
 ### 📄 [Paper (PDF)](your-pdf-link)  
 ### 🌐 [Project Page](https://blur2vid.github.io)  
 ### 📂 [Checkpoints](https://huggingface.co/tedlasai/learn2refocus/tree/main)
@@ -17,6 +18,7 @@ If you use our dataset, code, or model, please cite:
   title        = {Generating the Past, Present, and Future from a Motion-Blurred Image},
   author       = {Tedla, SaiKiran and Zhu, Kelly and Canham, Trevor and Taubner, Felix and Brown, Michael and Kutulakos, Kiriakos and Lindell, David},
   journal      = {ACM Transactions on Graphics},
+  year         = {2025},
   note         = {SIGGRAPH Asia.}
 }
 ```
@@ -44,30 +46,24 @@ conda activate blur2vid
 
 ### 🧪 Testing (In-the-Wild)
 
-
-1. Set the basedir in `training/configs/outsidephotos.yaml` to the path of the repository on your computer. This will be the directory that contains the README.md. 
-2. Place images (png) in `datasets/my_motion_blurred_images`. You may also place your photos in any other directory and change the video_root_dir in `training/configs/outsidephotos.yaml`. 
-3. Download checkpoints with ``python setup/download_checkpoints.py outsidephotos``. The checkpoint directory should appear in the ``training`` directory.
-4. You can change the number of GPUs to whichever is available on your computer through the CUDA_VISIBLE_DEVICES.
-
-
+Running the model on images is as simple as:
 ```bash
-cd training
 conda activate blur2vid
-export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
-export CUDA_VISIBLE_DEVICES=0,1,2,3 #4 GPUS
-accelerate launch --config_file accelerator_configs/accelerator_val_config.yaml --multi_gpu \
-  train_controlnet.py \
-  --config "configs/outsidephotos.yaml"
+
+python inference.py --image_path assets/dummy_image.png --output_path output/
 ```
 
-5. Results and visualizations will be saved to the directory `cogvideox-outsidephotos`. Deblurred videos (mp4) and frames (png) in both the 1x (present) and 2x (past,present, and future) modes will be output. Once an image is processed, our model doesn't reprocess it to support easier inference in the case where you add a small subset of files to your input motion_blurred directory. If you want to re-run the same image, please either delete the processed version from `cogvideox-outsidephotos/deblurred` or rename the image inside the `my_motion_blurred_images` directory.
+We also provide an interactive Gradio demo:
+
+```bash
+python gradio/app.py
+```
 
 ---
 
 
 ### 🧪 Testing (GOPRO/BAIST)
-To test on these datasets it is quite similar to the in-the-wild. Except you may use `configs/gopro_test.yaml`, `configs/gopro_2x_test.yaml`, or `configs/baist_test.yaml`, depending on the experiment you are interested in.
+To test on these datasets, please use `configs/gopro_test.yaml`, `configs/gopro_2x_test.yaml`, or `configs/baist_test.yaml`, depending on the experiment you are interested in.
 
 Set the following paths in your YAML config (feel free to change others paths to match your configuration):
 1. Set the basedir in the corresponding yaml file in `training/configs/` to the path of the repository. This will be the directory that contains the README.md. 
