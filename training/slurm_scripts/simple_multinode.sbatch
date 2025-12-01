@@ -28,7 +28,7 @@ fi
 
 source ~/.bashrc
 conda activate gencam
-cd /datasets/sai/gencam/cogvideox/training
+cd /datasets/sai/blur2vid/training
 
 echo "START TIME: $(date)"
 

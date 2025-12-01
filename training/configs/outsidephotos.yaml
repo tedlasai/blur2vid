@@ -1,6 +1,6 @@
 # === Required or overridden ===
-base_dir: "/datasets/sai/gencam/blur2vid"
-pretrained_model_name_or_path: "cogvideox/CogVideoX-2b/models--THUDM--CogVideoX-2b/snapshots/1137dacfc2c9c012bed6a0793f4ecf2ca8e7ba01"  # Replace with actual path or env var expansion
+base_dir: "/datasets/sai/blur2vid"
+pretrained_model_name_or_path: "CogVideoX-2b/models--THUDM--CogVideoX-2b/snapshots/1137dacfc2c9c012bed6a0793f4ecf2ca8e7ba01"  # Replace with actual path or env var expansion
 video_root_dir: "datasets/my_motion_blurred_images"
 csv_path: "set-path-to-csv-file"  # Replace with actual CSV path
 output_dir: "cogvideox-outsidephotos"

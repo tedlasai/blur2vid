@@ -14,7 +14,7 @@
 # prepare your environment here
 source ~/.bashrc
 conda activate gencam
-cd /datasets/sai/gencam/cogvideox/training
+cd /datasets/sai/blur2vid/training
 export CUDA_VISIBLE_DEVICES=0,1,2,3
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 
