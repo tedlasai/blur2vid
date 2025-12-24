@@ -25,7 +25,8 @@ stacks.tar
 /datasets
 /Adobe_240fps_dataset_old
 /extra/compile_checkpoints.py 
-
+/dataset_viz
+extra/dataset_viz.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
