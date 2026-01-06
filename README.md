@@ -3,7 +3,7 @@
 **SaiKiran Tedla, Kelly Zhu, Trevor Canham, Felix Taubner, Michael Brown, Kiriakos Kutulakos, David Lindell**  
 University of Toronto & York University  
 
-### 🤗 [Demo](https://huggingface.co/spaces/tedlasai/blur2vid)
+### 🤗 [Demo](https://huggingface.co/spaces/torontocomputationalimaging/blur2vid)
 ### 📄 [Paper (PDF)](https://dl.acm.org/doi/10.1145/3763306)  
 ### 🌐 [Project Page](https://blur2vid.github.io)  
 ### 📂 [Checkpoints](https://huggingface.co/tedlasai/blur2vid/tree/main)
