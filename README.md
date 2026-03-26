@@ -7,7 +7,7 @@ University of Toronto & York University
 ### 📄 [Paper (PDF)](https://dl.acm.org/doi/10.1145/3763306)  
 ### 🌐 [Project Page](https://blur2vid.github.io)  
 ### 📂 [Checkpoints](https://huggingface.co/tedlasai/blur2vid/tree/main)
-### 📂 [Data and Outputs](https://ln5.sync.com/dl/9eb4e01f0#gekbh64j-f6skwsrj-9vxh2fej-68d3xr7k)
+### 📂 [Data and Outputs](https://ln5.sync.com/dl/fbd840ed0#p448mssy-ta5qhuyk-xgjtp2r3-g73huj8t)
 ---
 
 ## 📌 Citation
@@ -64,7 +64,7 @@ python gradio/app.py
 
 
 ### 🧪 Testing (GOPRO/BAIST)
-We provide our processed GOPRO dataset and comparison outputs [here](https://ln5.sync.com/dl/9eb4e01f0#gekbh64j-f6skwsrj-9vxh2fej-68d3xr7k) (for example `GOPRO_7/` for the processed inputs and `GOPROResultsImages/` for evaluation outputs). You can then compute metrics using:
+We provide our processed GOPRO dataset and comparison outputs [here](https://ln5.sync.com/dl/fbd840ed0#p448mssy-ta5qhuyk-xgjtp2r3-g73huj8t) (for example `GOPRO_7/` for the processed inputs and `GOPROResultsImages/` for evaluation outputs). You can then compute metrics using:
 
 - `python extra/moMets-parallel-gopro.py`
 - `python extra/moMets-parallel-baist.py`
