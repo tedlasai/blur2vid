@@ -64,7 +64,7 @@ python gradio/app.py
 
 
 ### 🧪 Testing (GOPRO/BAIST)
-We provide our processed GOPRO dataset and comparison outputs [here] (https://ln5.sync.com/dl/9eb4e01f0#gekbh64j-f6skwsrj-9vxh2fej-68d3xr7k) (for example `GOPRO_7/` for the processed inputs and `GOPROResultsImages/` for evaluation outputs). You can then compute metrics using:
+We provide our processed GOPRO dataset and comparison outputs [here](https://ln5.sync.com/dl/9eb4e01f0#gekbh64j-f6skwsrj-9vxh2fej-68d3xr7k) (for example `GOPRO_7/` for the processed inputs and `GOPROResultsImages/` for evaluation outputs). You can then compute metrics using:
 
 - `python extra/moMets-parallel-gopro.py`
 - `python extra/moMets-parallel-baist.py`
