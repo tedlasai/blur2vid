@@ -83,6 +83,29 @@ python extra/build_gopro_dataset.py \
 
 After generation, point your GOPRO config to the processed dataset root (for example `datasets/GOPRO_7`).
 
+Expected output structure:
+
+```text
+<save-root>/
+├── train/
+│   ├── blur/
+│   │   └── <sequence_name>/
+│   │       └── *.png
+│   └── sharp/
+│       └── <sequence_name>/
+│           └── *.png
+└── test/
+    ├── blur/
+    │   └── <sequence_name>/
+    │       └── *.png
+    └── sharp/
+        └── <sequence_name>/
+            └── *.png
+```
+
+Example frame path after generation:
+`/home/tedlasai/genCamera/GOPRO_7/train/blur/GOPR0372_07_00/000326.png`
+
 ```bash
 cd training
 conda activate blur2vid
