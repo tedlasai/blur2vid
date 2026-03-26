@@ -7,6 +7,7 @@ University of Toronto & York University
 ### 📄 [Paper (PDF)](https://dl.acm.org/doi/10.1145/3763306)  
 ### 🌐 [Project Page](https://blur2vid.github.io)  
 ### 📂 [Checkpoints](https://huggingface.co/tedlasai/blur2vid/tree/main)
+### 📂 [Data and Outputs](https://ln5.sync.com/dl/9eb4e01f0#gekbh64j-f6skwsrj-9vxh2fej-68d3xr7k)
 ---
 
 ## 📌 Citation
@@ -63,12 +64,17 @@ python gradio/app.py
 
 
 ### 🧪 Testing (GOPRO/BAIST)
-To test on these datasets, please use `configs/gopro_test.yaml`, `configs/gopro_2x_test.yaml`, or `configs/baist_test.yaml`, depending on the experiment you are interested in.
+We provide our processed GOPRO dataset and comparison outputs [here] (https://ln5.sync.com/dl/9eb4e01f0#gekbh64j-f6skwsrj-9vxh2fej-68d3xr7k) (for example `GOPRO_7/` for the processed inputs and `GOPROResultsImages/` for evaluation outputs). You can then compute metrics using:
+
+- `python extra/moMets-parallel-gopro.py`
+- `python extra/moMets-parallel-baist.py`
+
+To test on these datasets, please use `configs/gopro_test.yaml`, `configs/gopro_2x_test.yaml`, or `configs/baist_test.yaml`, depending on the experiment you are interested in. 
 
 Set the following paths in your YAML config (feel free to change others paths to match your configuration):
 1. Set the basedir in the corresponding yaml file in `training/configs/` to the path of the repository. This will be the directory that contains the README.md. 
 2. Download checkpoints with ``python setup/download_checkpoints.py baist`` or ``python setup/download_checkpoints.py gopro``, respectively. The checkpoint directory should appear in the ``training`` directory.
-3. Prepare GOPRO `blur/` and `sharp/` folders with:
+3. Prepare GOPRO7 `blur/` and `sharp/` folders with:
 
 ```bash
 conda activate blur2vid
@@ -118,6 +124,20 @@ accelerate launch --config_file accelerator_configs/accelerator_val_config.yaml 
 ```
 
 ---
+
+4. To build the gopro test format for metrics computation. We have to downsample the GT to allow comparison with a few of the baselines. 
+
+```
+  python3 build_gopro_test.py   \
+  --gopro7_path /path/to/GOPRO_7
+  --split test   
+  --output_root /path/to/GT/out
+
+  python extra/downsample_results.py \
+    --src /path/to/GT/out
+    --dst /path/to/GT_down/out
+```
+
 
 ### 🏋️‍♂️ Training
 
@@ -178,7 +198,8 @@ datasets/FullDataset/Adobe240/
 
 - Checkpoints are available on the [project page](https://blur2vid.github.io).  
 - We utilize `extra/moMets-parallel-gopro.py` and `extra/moMets-parallel-baist.py` to compute all metrics for this project.
-
+-- We evaluate at 640x320 resolution for GOPRO (our model outputs at 1280x720, but we downsample to allow comaprison with baselines (see ``extra/downsample_results.py``)). For BAIST, we resize to 160x192 after applying crop boxes provided by BAIST. 
+-- The evaluation scripts utilize a slightly different format
 ---
 
 ### 📨 Contact
