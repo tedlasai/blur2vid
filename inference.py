@@ -40,7 +40,7 @@ check_min_version("0.31.0.dev0")
 
 
 def convert_to_srgb(img: Image):
-    if 'icc_profile' in img.info:
+    if 'icc_profile' in img.info and img.mode == "RGB":
         icc = img.info['icc_profile']
         src_profile = ImageCms.ImageCmsProfile(io.BytesIO(icc))
         dst_profile = ImageCms.createProfile("sRGB")
@@ -250,13 +250,13 @@ def main(args):
     for image_path in image_paths:
         image = Image.open(image_path)
 
-        processed_image, video = inference_on_image(pipe, image, "past_present_and_future", model_config, args)
+        processed_image, video = inference_on_image(pipe, image, "present", model_config, args)
 
-        vid_output_path = output_path / f"{image_path.stem}.mp4"
+        vid_output_path = output_path / f"{image_path.stem}_seed{args.seed}.mp4"
         export_to_video(video, vid_output_path, fps=20)
         
         # save input image as well
-        inpug_image_output_path = output_path / f"{image_path.stem}_input.png"
+        inpug_image_output_path = output_path / f"{image_path.stem}_seed{args.seed}_input.png"
         Image.fromarray(processed_image[0]).save(inpug_image_output_path)
 
 

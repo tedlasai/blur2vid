@@ -27,6 +27,8 @@ stacks.tar
 /extra/compile_checkpoints.py 
 /dataset_viz
 extra/dataset_viz.py
+/output
+/my_images
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -68,7 +68,20 @@ To test on these datasets, please use `configs/gopro_test.yaml`, `configs/gopro_
 Set the following paths in your YAML config (feel free to change others paths to match your configuration):
 1. Set the basedir in the corresponding yaml file in `training/configs/` to the path of the repository. This will be the directory that contains the README.md. 
 2. Download checkpoints with ``python setup/download_checkpoints.py baist`` or ``python setup/download_checkpoints.py gopro``, respectively. The checkpoint directory should appear in the ``training`` directory.
-3. Put the GOPRO or BAIST dataset in `datasets/baist` or `datasets/GOPRO_7` respectively.
+3. Prepare GOPRO `blur/` and `sharp/` folders with:
+
+```bash
+conda activate blur2vid
+
+# GOPRO example (source has train/test splits)
+python extra/build_gopro_dataset.py \
+  --src-root /path/to/GOPRO \
+  --save-root /path/to/GOPRO_7 \
+  --splits train test
+
+```
+
+After generation, point your GOPRO config to the processed dataset root (for example `datasets/GOPRO_7`).
 
 ```bash
 cd training
